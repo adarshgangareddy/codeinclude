@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coding Challenge Project</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.2em;
+            color: #222;
+            letter-spacing: 2px;
+        }
+        p {
+            font-size: 1.2em;
+            color: #444;
+            margin-bottom: 2em;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1em 2em;
+            font-size: 1.1em;
+            background: #66a6ff;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(102,166,255,0.2);
+            transition: background 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #89f7fe;
+            color: #222;
+            transform: scale(1.05);
+        }
+        .emoji {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            animation: bounce 1.2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-15px);}
+        }
+        .footer {
+            margin-top: 3em;
+            color: #888;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="emoji">🚀</div>
+    <h1>Welcome to My Coding Challenge Project</h1>
+    <p>
+        Ready to boost your coding skills?<br>
+        Dive into interactive challenges and level up your programming journey!
+    </p>
+    <a href="first.html" class="btn">Start Coding Challenges</a>
+    <div class="footer">Created by Adarsha VG &middot; Have fun learning! 🎉</div>
+</body>

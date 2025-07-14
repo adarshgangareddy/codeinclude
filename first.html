@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Challenges</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .language-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+            border: 2px solid #e9ecef;
+        }
+
+        .language-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .language-btn:not(.active) {
+            background: transparent;
+            color: #6c757d;
+        }
+
+        .difficulty-display {
+            padding: 10px 20px;
+            color: white;
+            border-radius: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-display.bronze {
+            background: linear-gradient(135deg, #cd7f32, #b8860b);
+            box-shadow: 0 4px 15px rgba(205, 127, 50, 0.3);
+        }
+
+        .difficulty-display.silver {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+            box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3);
+        }
+
+        .difficulty-display.gold {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .difficulty-display.platinum {
+            background: linear-gradient(135deg, #e5e4e2, #d3d3d3);
+            box-shadow: 0 4px 15px rgba(229, 228, 226, 0.3);
+        }
+
+        .difficulty-display.diamond {
+            background: linear-gradient(135deg, #b9f2ff, #00bfff);
+            box-shadow: 0 4px 15px rgba(185, 242, 255, 0.3);
+        }
+
+        .challenge-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .challenge-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .challenge-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #495057;
+        }
+
+        .example {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .code-area {
+            margin-top: 20px;
+        }
+
+        .code-input {
+            width: 100%;
+            height: 200px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            color: #2d3436;
+            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(253, 203, 110, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00cec9, #55a3ff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 206, 201, 0.6);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .feedback.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .feedback.hint {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: white;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .completion-message h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .language-toggle {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Progressive Coding Challenges</h1>
+            <p>Master Python & C with increasingly difficult problems</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="controls">
+                <div class="language-toggle">
+                    <button class="language-btn active" onclick="switchLanguage('python')">🐍 Python</button>
+                    <button class="language-btn" onclick="switchLanguage('c')">⚡ C</button>
+                </div>
+                <div class="difficulty-display bronze" id="difficultyDisplay">🥉 Bronze Rank</div>
+            </div>
+
+            <div id="challengeContainer">
+                <!-- Challenges will be loaded here -->
+            </div>
+
+            <div id="completionMessage" class="completion-message" style="display: none;">
+                <h2>🎉 Congratulations!</h2>
+                <p>You've completed all challenges in this difficulty level!</p>
+                <button class="btn btn-success" onclick="nextDifficulty()">Next Difficulty Level</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'python';
+        let currentChallenge = 0;
+        let currentDifficulty = 1;
+        let completedChallenges = 0;
+        let totalChallenges = 0;
+        let currentRank = 1;
+
+        const rankInfo = {
+            1: { name: 'Bronze', emoji: '🥉', class: 'bronze' },
+            2: { name: 'Silver', emoji: '🥈', class: 'silver' },
+            3: { name: 'Gold', emoji: '🥇', class: 'gold' },
+            4: { name: 'Platinum', emoji: '💎', class: 'platinum' },
+            5: { name: 'Diamond', emoji: '💠', class: 'diamond' }
+        };
+
+        const challenges = {
+            python: {
+                1: [ // Bronze
+                    {
+                        title: "Hello World",
+                        description: "Write a program that prints 'Hello, World!' to the console.",
+                        example: "Output: Hello, World!",
+                        solution: "print('Hello, World!')",
+                        hints: ["Use the print() function", "Don't forget the quotes around the text"]
+                    },
+                    {
+                        title: "Simple Math",
+                        description: "Write a program that calculates and prints the sum of 15 and 27.",
+                        example: "Output: 42",
+                        solution: "print(15 + 27)",
+                        hints: ["Use the + operator", "You can do math inside print()"]
+                    }
+                ],
+                2: [ // Silver
+                    {
+                        title: "Variables",
+                        description: "Create two variables: 'name' with your name and 'age' with your age. Print them both.",
+                        example: "Output: My name is John and I am 25 years old",
+                        solution: "name = 'John'\nage = 25\nprint(f'My name is {name} and I am {age} years old')",
+                        hints: ["Use variables to store values", "Use f-strings for formatting: f'text {variable}'"]
+                    },
+                    {
+                        title: "User Input",
+                        description: "Ask the user for their name and greet them personally.",
+                        example: "Input: Alice\nOutput: Hello, Alice!",
+                        solution: "name = input('What is your name? ')\nprint(f'Hello, {name}!')",
+                        hints: ["Use input() to get user input", "Store the input in a variable"]
+                    }
+                ],
+                3: [ // Gold
+                    {
+                        title: "Simple Condition",
+                        description: "Ask for a number and print 'Positive' if it's greater than 0, 'Negative' if less than 0, or 'Zero' if it equals 0.",
+                        example: "Input: 5\nOutput: Positive",
+                        solution: "num = int(input('Enter a number: '))\nif num > 0:\n    print('Positive')\nelif num < 0:\n    print('Negative')\nelse:\n    print('Zero')",
+                        hints: ["Use if, elif, else statements", "Convert input to int using int()"]
+                    },
+                    {
+                        title: "List Operations",
+                        description: "Create a list of numbers [1, 2, 3, 4, 5] and print the sum of all elements.",
+                        example: "Output: 15",
+                        solution: "numbers = [1, 2, 3, 4, 5]\nprint(sum(numbers))",
+                        hints: ["Use square brackets for lists", "Use the sum() function"]
+                    }
+                ],
+                4: [ // Platinum
+                    {
+                        title: "Loop Practice",
+                        description: "Print all even numbers from 2 to 20 using a for loop.",
+                        example: "Output: 2 4 6 8 10 12 14 16 18 20",
+                        solution: "for i in range(2, 21, 2):\n    print(i, end=' ')",
+                        hints: ["Use range(start, stop, step)", "Use end=' ' in print to stay on same line"]
+                    },
+                    {
+                        title: "Function Definition",
+                        description: "Write a function called 'multiply' that takes two parameters and returns their product. Test it with 4 and 7.",
+                        example: "Output: 28",
+                        solution: "def multiply(a, b):\n    return a * b\n\nresult = multiply(4, 7)\nprint(result)",
+                        hints: ["Use def to define a function", "Use return to send back a value"]
+                    }
+                ],
+                5: [ // Diamond
+                    {
+                        title: "Dictionary & Loops",
+                        description: "Create a dictionary with 3 student names as keys and their grades as values. Print each student's name and grade.",
+                        example: "Output: Alice: 85\nBob: 92\nCharlie: 78",
+                        solution: "students = {'Alice': 85, 'Bob': 92, 'Charlie': 78}\nfor name, grade in students.items():\n    print(f'{name}: {grade}')",
+                        hints: ["Use curly braces for dictionaries", "Use .items() to get key-value pairs"]
+                    },
+                    {
+                        title: "List Comprehension",
+                        description: "Create a list of squares of numbers from 1 to 10 using list comprehension.",
+                        example: "Output: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]",
+                        solution: "squares = [x**2 for x in range(1, 11)]\nprint(squares)",
+                        hints: ["Use [expression for item in iterable] syntax", "Use ** for exponentiation"]
+                    }
+                ]
+            },
+            c: {
+                1: [ // Bronze
+                    {
+                        title: "Hello World",
+                        description: "Write a C program that prints 'Hello, World!' to the console.",
+                        example: "Output: Hello, World!",
+                        solution: "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}",
+                        hints: ["Include stdio.h for printf", "Use printf() to print text", "Don't forget the newline \\n"]
+                    },
+                    {
+                        title: "Simple Math",
+                        description: "Write a C program that calculates and prints the sum of 15 and 27.",
+                        example: "Output: 42",
+                        solution: "#include <stdio.h>\n\nint main() {\n    int result = 15 + 27;\n    printf(\"%d\\n\", result);\n    return 0;\n}",
+                        hints: ["Declare variables with int", "Use %d in printf for integers"]
+                    }
+                ],
+                2: [ // Silver
+                    {
+                        title: "Variables",
+                        description: "Create variables for name (string) and age (integer). Print them both.",
+                        example: "Output: My name is John and I am 25 years old",
+                        solution: "#include <stdio.h>\n\nint main() {\n    char name[] = \"John\";\n    int age = 25;\n    printf(\"My name is %s and I am %d years old\\n\", name, age);\n    return 0;\n}",
+                        hints: ["Use char[] for strings", "Use %s for strings and %d for integers in printf"]
+                    },
+                    {
+                        title: "User Input",
+                        description: "Ask the user for their name and greet them personally.",
+                        example: "Input: Alice\nOutput: Hello, Alice!",
+                        solution: "#include <stdio.h>\n\nint main() {\n    char name[50];\n    printf(\"What is your name? \");\n    scanf(\"%s\", name);\n    printf(\"Hello, %s!\\n\", name);\n    return 0;\n}",
+                        hints: ["Use scanf() for input", "Declare char array with size for strings"]
+                    }
+                ],
+                3: [ // Gold
+                    {
+                        title: "Simple Condition",
+                        description: "Ask for a number and print 'Positive' if it's greater than 0, 'Negative' if less than 0, or 'Zero' if it equals 0.",
+                        example: "Input: 5\nOutput: Positive",
+                        solution: "#include <stdio.h>\n\nint main() {\n    int num;\n    printf(\"Enter a number: \");\n    scanf(\"%d\", &num);\n    if (num > 0) {\n        printf(\"Positive\\n\");\n    } else if (num < 0) {\n        printf(\"Negative\\n\");\n    } else {\n        printf(\"Zero\\n\");\n    }\n    return 0;\n}",
+                        hints: ["Use if, else if, else statements", "Use &num in scanf for integers"]
+                    },
+                    {
+                        title: "Array Operations",
+                        description: "Create an array of 5 numbers and print the sum of all elements.",
+                        example: "Output: Sum: 15",
+                        solution: "#include <stdio.h>\n\nint main() {\n    int numbers[] = {1, 2, 3, 4, 5};\n    int sum = 0;\n    for (int i = 0; i < 5; i++) {\n        sum += numbers[i];\n    }\n    printf(\"Sum: %d\\n\", sum);\n    return 0;\n}",
+                        hints: ["Use curly braces for array initialization", "Use a for loop to iterate through array"]
+                    }
+                ],
+                4: [ // Platinum
+                    {
+                        title: "Loop Practice",
+                        description: "Print all even numbers from 2 to 20 using a for loop.",
+                        example: "Output: 2 4 6 8 10 12 14 16 18 20",
+                        solution: "#include <stdio.h>\n\nint main() {\n    for (int i = 2; i <= 20; i += 2) {\n        printf(\"%d \", i);\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+                        hints: ["Use i += 2 to increment by 2", "Use i <= 20 as condition"]
+                    },
+                    {
+                        title: "Function Definition",
+                        description: "Write a function called 'multiply' that takes two parameters and returns their product. Test it with 4 and 7.",
+                        example: "Output: 28",
+                        solution: "#include <stdio.h>\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nint main() {\n    int result = multiply(4, 7);\n    printf(\"%d\\n\", result);\n    return 0;\n}",
+                        hints: ["Define function before main()", "Specify return type (int) and parameter types"]
+                    }
+                ],
+                5: [ // Diamond
+                    {
+                        title: "Struct Definition",
+                        description: "Create a struct for a student with name and grade. Create a student and print their information.",
+                        example: "Output: Student: Alice, Grade: 85",
+                        solution: "#include <stdio.h>\n#include <string.h>\n\nstruct Student {\n    char name[50];\n    int grade;\n};\n\nint main() {\n    struct Student s1;\n    strcpy(s1.name, \"Alice\");\n    s1.grade = 85;\n    printf(\"Student: %s, Grade: %d\\n\", s1.name, s1.grade);\n    return 0;\n}",
+                        hints: ["Use struct keyword", "Use strcpy() to assign strings", "Access members with dot notation"]
+                    },
+                    {
+                        title: "Pointer Basics",
+                        description: "Create an integer variable, a pointer to it, and print both the value and the address.",
+                        example: "Output: Value: 42, Address: 0x7fff5fbff6ac",
+                        solution: "#include <stdio.h>\n\nint main() {\n    int num = 42;\n    int *ptr = &num;\n    printf(\"Value: %d, Address: %p\\n\", *ptr, ptr);\n    return 0;\n}",
+                        hints: ["Use & to get address", "Use * to declare pointer and dereference", "Use %p for pointer addresses"]
+                    }
+                ]
+            }
+        };
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            currentChallenge = 0;
+            currentRank = 1;
+            currentDifficulty = 1;
+            completedChallenges = 0;
+            
+            // Update button states
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reset rank display
+            updateRankDisplay();
+            loadChallenge();
+        }
+
+        function loadChallenge() {
+            const challengeData = challenges[currentLanguage][currentRank];
+            if (!challengeData) {
+                showFinalCompletion();
+                return;
+            }
+            
+            totalChallenges = challengeData.length;
+            
+            if (currentChallenge >= totalChallenges) {
+                showRankCompletion();
+                return;
+            }
+            
+            const challenge = challengeData[currentChallenge];
+            const container = document.getElementById('challengeContainer');
+            
+            container.innerHTML = `
+                <div class="challenge-card">
+                    <div class="challenge-title">${challenge.title}</div>
+                    <div class="challenge-description">${challenge.description}</div>
+                    <div class="example"><strong>Example:</strong><br>${challenge.example}</div>
+                    <div class="code-area">
+                        <textarea class="code-input" id="codeInput" placeholder="Write your ${currentLanguage.toUpperCase()} code here..."></textarea>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSolution()">Check Solution</button>
+                            <button class="btn btn-secondary" onclick="getHint()">Get Hint</button>
+                            <button class="btn btn-success" onclick="showSolution()">Show Solution</button>
+                        </div>
+                        <div id="feedback"></div>
+                    </div>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function updateRankDisplay() {
+            const difficultyDisplay = document.getElementById('difficultyDisplay');
+            const rank = rankInfo[currentRank];
+            if (rank) {
+                difficultyDisplay.textContent = `${rank.emoji} ${rank.name} Rank`;
+                difficultyDisplay.className = `difficulty-display ${rank.class}`;
+            }
+        }
+
+        function showRankCompletion() {
+            document.getElementById('challengeContainer').innerHTML = `
+                <div class="completion-message">
+                    <h2>🎉 ${rankInfo[currentRank].name} Rank Complete!</h2>
+                    <p>You've mastered all ${rankInfo[currentRank].name} challenges! Ready for the next rank?</p>
+                    <button class="btn btn-success" onclick="nextRank()">Advance to Next Rank</button>
+                </div>
+            `;
+        }
+
+        function showFinalCompletion() {
+            document.getElementById('challengeContainer').innerHTML = `
+                <div class="completion-message">
+                    <h2>🏆 Diamond Master!</h2>
+                    <p>Congratulations! You've completed all ranks and become a coding master!</p>
+                    <button class="btn btn-success" onclick="resetProgress()">Start Over</button>
+                </div>
+            `;
+        }
+
+        function nextRank() {
+            currentRank++;
+            currentChallenge = 0;
+            completedChallenges = 0;
+            
+            updateRankDisplay();
+            loadChallenge();
+        }
+
+        function resetProgress() {
+            currentRank = 1;
+            currentChallenge = 0;
+            completedChallenges = 0;
+            
+            updateRankDisplay();
+            loadChallenge();
+        }
+
+        function checkSolution() {
+            const userCode = document.getElementById('codeInput').value.trim();
+            const challenge = challenges[currentLanguage][currentDifficulty][currentChallenge];
+            const feedback = document.getElementById('feedback');
+            
+            if (!userCode) {
+                feedback.innerHTML = '<div class="feedback error">Please write some code first!</div>';
+                return;
+            }
+            
+            // Very flexible solution checking - remove all whitespace and convert to lowercase
+            const normalizedUser = userCode.replace(/\s+/g, '').toLowerCase().replace(/['"]/g, '"');
+            
+            // Check if solution contains key elements
+            let isCorrect = false;
+            
+            if (currentLanguage === 'python') {
+                if (challenge.title === 'Hello World') {
+                    isCorrect = normalizedUser.includes('print(') && 
+                               (normalizedUser.includes('hello,world') || normalizedUser.includes('helloworld'));
+                } else if (challenge.title === 'Simple Math') {
+                    isCorrect = normalizedUser.includes('print(') && 
+                               (normalizedUser.includes('15+27') || normalizedUser.includes('42') || 
+                                normalizedUser.includes('27+15'));
+                } else if (challenge.title === 'Variables') {
+                    isCorrect = (normalizedUser.includes('name=') || normalizedUser.includes('name =')) && 
+                               (normalizedUser.includes('age=') || normalizedUser.includes('age =')) && 
+                               normalizedUser.includes('print(');
+                } else if (challenge.title === 'User Input') {
+                    isCorrect = normalizedUser.includes('input(') && normalizedUser.includes('print(');
+                } else if (challenge.title === 'Simple Condition') {
+                    isCorrect = normalizedUser.includes('if') && normalizedUser.includes('input(') && 
+                               (normalizedUser.includes('int(') || normalizedUser.includes('float('));
+                } else if (challenge.title === 'List Operations') {
+                    isCorrect = (normalizedUser.includes('[') || normalizedUser.includes('list(')) && 
+                               (normalizedUser.includes('sum(') || normalizedUser.includes('+='));
+                } else if (challenge.title === 'Loop Practice') {
+                    isCorrect = normalizedUser.includes('for') && 
+                               (normalizedUser.includes('range(') || normalizedUser.includes('in'));
+                } else if (challenge.title === 'Function Definition') {
+                    isCorrect = normalizedUser.includes('def') && normalizedUser.includes('return') &&
+                               (normalizedUser.includes('multiply') || normalizedUser.includes('*'));
+                }
+            } else if (currentLanguage === 'c') {
+                if (challenge.title === 'Hello World') {
+                    isCorrect = normalizedUser.includes('printf(') && 
+                               (normalizedUser.includes('hello,world') || normalizedUser.includes('helloworld'));
+                } else if (challenge.title === 'Simple Math') {
+                    isCorrect = normalizedUser.includes('printf(') && 
+                               (normalizedUser.includes('15+27') || normalizedUser.includes('42') || 
+                                normalizedUser.includes('27+15'));
+                } else if (challenge.title === 'Variables') {
+                    isCorrect = (normalizedUser.includes('char') || normalizedUser.includes('string')) && 
+                               normalizedUser.includes('int') && normalizedUser.includes('printf(');
+                } else if (challenge.title === 'User Input') {
+                    isCorrect = normalizedUser.includes('scanf(') && normalizedUser.includes('printf(');
+                } else if (challenge.title === 'Simple Condition') {
+                    isCorrect = normalizedUser.includes('if') && normalizedUser.includes('scanf(') && 
+                               normalizedUser.includes('int');
+                } else if (challenge.title === 'Array Operations') {
+                    isCorrect = (normalizedUser.includes('[') || normalizedUser.includes('array')) && 
+                               normalizedUser.includes('for') && 
+                               (normalizedUser.includes('sum') || normalizedUser.includes('+='));
+                } else if (challenge.title === 'Loop Practice') {
+                    isCorrect = normalizedUser.includes('for') && normalizedUser.includes('printf(');
+                } else if (challenge.title === 'Function Definition') {
+                    isCorrect = (normalizedUser.includes('intmultiply') || normalizedUser.includes('multiply')) && 
+                               normalizedUser.includes('return') && normalizedUser.includes('*');
+                }
+            }
+            
+            if (isCorrect) {
+                feedback.innerHTML = '<div class="feedback success">🎉 Correct! Great job!</div>';
+                completedChallenges++;
+                setTimeout(() => {
+                    currentChallenge++;
+                    loadChallenge();
+                }, 2000);
+            } else {
+                feedback.innerHTML = '<div class="feedback error">Not quite right. Make sure you\'re using the right concepts. Try again or get a hint!<br><br><strong>Debug info:</strong> Looking for key elements in your code...</div>';
+            }
+        }
+
+        function getHint() {
+            const challenge = challenges[currentLanguage][currentDifficulty][currentChallenge];
+            const feedback = document.getElementById('feedback');
+            const randomHint = challenge.hints[Math.floor(Math.random() * challenge.hints.length)];
+            feedback.innerHTML = `<div class="feedback hint"><strong>💡 Hint:</strong> ${randomHint}</div>`;
+        }
+
+        function showSolution() {
+            const challenge = challenges[currentLanguage][currentDifficulty][currentChallenge];
+            const codeInput = document.getElementById('codeInput');
+            const feedback = document.getElementById('feedback');
+            
+            codeInput.value = challenge.solution;
+            feedback.innerHTML = '<div class="feedback success">Solution shown! Study it and click "Next Challenge" when ready.</div>';
+            
+            // Add next challenge button
+            const buttonGroup = document.querySelector('.button-group');
+            if (!document.getElementById('nextBtn')) {
+                const nextBtn = document.createElement('button');
+                nextBtn.id = 'nextBtn';
+                nextBtn.className = 'btn btn-success';
+                nextBtn.textContent = 'Next Challenge';
+                nextBtn.onclick = () => {
+                    currentChallenge++;
+                    loadChallenge();
+                };
+                buttonGroup.appendChild(nextBtn);
+            }
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progress = (completedChallenges / totalChallenges) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        function showCompletionMessage() {
+            document.getElementById('challengeContainer').style.display = 'none';
+            document.getElementById('completionMessage').style.display = 'block';
+        }
+
+        function nextDifficulty() {
+            currentDifficulty++;
+            currentChallenge = 0;
+            completedChallenges = 0;
+            
+            const difficultyNames = {1: 'Beginner', 2: 'Intermediate', 3: 'Advanced'};
+            document.getElementById('difficultyDisplay').textContent = 
+                `Level ${currentDifficulty} - ${difficultyNames[currentDifficulty] || 'Expert'}`;
+            
+            document.getElementById('challengeContainer').style.display = 'block';
+            document.getElementById('completionMessage').style.display = 'none';
+            
+            if (challenges[currentLanguage][currentDifficulty]) {
+                loadChallenge();
+            } else {
+                document.getElementById('challengeContainer').innerHTML = 
+                    '<div class="completion-message"><h2>🏆 All Challenges Complete!</h2><p>You\'ve mastered all available challenges! Great work!</p></div>';
+            }
+        }
+
+        // Initialize
+        loadChallenge();
+    </script>
+</body>
+</html>
